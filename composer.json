@@ -1,0 +1,26 @@
+{
+    "name": "marek-d-lis/phpstan-symfony-rules",
+    "description": "My PHPStan rules for Symfony i like to include in my projects",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "MarekLis\\PHPStanSymfonyRules\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "test": "phpstan analyse --level=max"
+    },
+    "version": "1.0.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marek D. Lis",
+            "email": "me@marekdlis.pl"
+        }
+    ]
+}
