@@ -9,6 +9,8 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 class NoDieRule implements Rule
 {
+    private const FORBIDDEN_FUNCTIONS = ['die', 'exit', 'dd'];
+
     public function getNodeType(): string
     {
         return Node\Expr\FuncCall::class;
@@ -16,13 +18,18 @@ class NoDieRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $errors = [];
-
-        // Check if the function call is die(), exit(), or dd()
-        if ($node->name instanceof Node\Name && in_array($node->name->toString(), ['die', 'exit', 'dd'])) {
-            $errors[] = RuleErrorBuilder::message('Avoid using die(), exit(), or dd() in the codebase')->build();
+        if (!$node->name instanceof Node\Name) {
+            return [];
         }
 
-        return $errors;
+        $functionName = $node->name->toString();
+
+        if (!in_array($functionName, self::FORBIDDEN_FUNCTIONS, true)) {
+            return [];
+        }
+
+        return [
+            RuleErrorBuilder::message(sprintf('Avoid using %s() in the codebase.', $functionName))->build(),
+        ];
     }
 }

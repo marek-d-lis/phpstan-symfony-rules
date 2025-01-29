@@ -9,6 +9,8 @@ use PhpParser\Node;
 
 class NoDumpRule implements Rule
 {
+    private const array FORBIDDEN_FUNCTIONS = ['var_dump', 'dump'];
+
     public function getNodeType(): string
     {
         return Node\Expr\FuncCall::class;
@@ -16,13 +18,18 @@ class NoDumpRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $errors = [];
-
-        // Check if the function call is var_dump() or dump()
-        if ($node->name instanceof Node\Name && in_array($node->name->toString(), ['var_dump', 'dump'])) {
-            $errors[] = RuleErrorBuilder::message('Avoid using var_dump() or dump() in the codebase')->build();
+        if (!$node->name instanceof Node\Name) {
+            return [];
         }
 
-        return $errors;
+        $functionName = $node->name->toString();
+
+        if (!in_array($functionName, self::FORBIDDEN_FUNCTIONS, true)) {
+            return [];
+        }
+
+        return [
+            RuleErrorBuilder::message(sprintf('Avoid using %s() in the codebase.', $functionName))->build(),
+        ];
     }
 }
