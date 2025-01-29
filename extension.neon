@@ -1,3 +1,3 @@
 services:
   - MarekLis\PHPStanSymfonyRules\Rules\NoDumpRule
-  - MarekLis\PHPStanSymfonyRules\Rules\NoDieRulez
+  - MarekLis\PHPStanSymfonyRules\Rules\NoDieRule
